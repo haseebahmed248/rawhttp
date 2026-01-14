@@ -7,11 +7,12 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"rawhttp/internal/handler"
 	"rawhttp/internal/request"
-	"rawhttp/internal/response"
+	"rawhttp/internal/router"
 )
 
-func handleConn(conn net.Conn) {
+func handleConn(conn net.Conn, route *router.Router) {
 	defer conn.Close() // close connection after completion
 	reader := bufio.NewReader(conn)
 	result, err := request.Parse(reader)
@@ -22,11 +23,7 @@ func handleConn(conn net.Conn) {
 	log.Print(result)
 
 	// Response
-	res := &response.Response{
-		StatusCode: 200,
-		StatusText: "OK",
-		Body:       []byte("Hello World"),
-	}
+	res := route.Handle(result)
 	res.Write(conn)
 
 }
@@ -37,11 +34,15 @@ func StartServer(port int) {
 		log.Print(err)
 	}
 	log.Print("Listening on port ", port)
+	route := router.NewRouter()
+	route.GET("/hello", handler.HelloHandler)
+	route.GET("/health", handler.HealthHandler)
+	route.POST("/echo", handler.EchoHandler)
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
 			log.Print(err)
 		}
-		go handleConn(conn)
+		go handleConn(conn, route)
 	}
 }
