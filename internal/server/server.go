@@ -1,24 +1,34 @@
 // TCP Listener, accept loop
 
 package server
+
 import (
- 	"net"
-	"log"
 	"bufio"
 	"fmt"
+	"log"
+	"net"
 	"rawhttp/internal/request"
+	"rawhttp/internal/response"
 )
 
-func handleConn(conn net.Conn){
-	defer conn.Close()				// close connection after completion
+func handleConn(conn net.Conn) {
+	defer conn.Close() // close connection after completion
 	reader := bufio.NewReader(conn)
 	result, err := request.Parse(reader)
-	if err != nil{
+	if err != nil {
 		log.Print("Error: ", err)
 		return
 	}
 	log.Print(result)
-	
+
+	// Response
+	res := &response.Response{
+		StatusCode: 200,
+		StatusText: "OK",
+		Body:       []byte("Hello World"),
+	}
+	res.Write(conn)
+
 }
 
 func StartServer(port int) {
@@ -27,7 +37,7 @@ func StartServer(port int) {
 		log.Print(err)
 	}
 	log.Print("Listening on port ", port)
-	for{
+	for {
 		conn, err := ln.Accept()
 		if err != nil {
 			log.Print(err)
