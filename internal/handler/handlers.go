@@ -33,9 +33,13 @@ func HealthHandler(req *request.Request) *response.Response {
 }
 
 func EchoHandler(req *request.Request) *response.Response {
+
 	return &response.Response{
 		StatusCode: 200,
-		Body:       []byte("Echo"),
+		Headers: map[string]string{
+			"Content-Type": "application/json",
+		},
+		Body: req.Body,
 	}
 }
 
