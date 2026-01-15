@@ -38,6 +38,8 @@ func StartServer(port int) {
 	route.GET("/hello", handler.HelloHandler)
 	route.GET("/health", handler.HealthHandler)
 	route.POST("/echo", handler.EchoHandler)
+	route.GET("/static/*", handler.StaticHandler)
+
 	for {
 		conn, err := ln.Accept()
 		if err != nil {

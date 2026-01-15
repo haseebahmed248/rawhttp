@@ -4,6 +4,7 @@ package router
 import (
 	"rawhttp/internal/request"
 	"rawhttp/internal/response"
+	"strings"
 )
 
 type HandlerFunc func(req *request.Request) *response.Response
@@ -33,7 +34,12 @@ func (r *Router) POST(path string, handler HandlerFunc) {
 
 func (r *Router) Handle(req *request.Request) *response.Response {
 	if handlers, ok := r.routes[req.Method]; ok {
-		if handler, ok := handlers[req.Path]; ok {
+		// [TODO]: In Future i need to create wildcard to make it work for any route
+		if handler, ok := handlers[req.Path]; ok || strings.Contains(req.Path, "/static") {
+			if strings.Contains(req.Path, "/static") {
+				function, _ := handlers["/static/*"]
+				return function(req)
+			}
 			return handler(req)
 		}
 	}
