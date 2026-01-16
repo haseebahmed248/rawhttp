@@ -12,17 +12,6 @@ Understand HTTP at the protocol level by implementing:
 - Static file serving
 - JSON API support
 
-## Status
-
-**Work in progress**
-
-- [x] TCP listener with concurrent connections
-- [ ] HTTP request parsing
-- [ ] Response builder
-- [ ] Router
-- [ ] Static file serving
-- [ ] Keep-alive support
-
 ## Run
 
 ```bash
