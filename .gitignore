@@ -1,12 +1,14 @@
 # Binaries
-rawhttp
 *.exe
 *.out
+rawhttp
 
 # IDE
 .idea/
 .vscode/
 *.swp
+
+mydata/*
 
 # OS
 .DS_Store
