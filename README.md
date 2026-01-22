@@ -15,7 +15,7 @@ Understand HTTP at the protocol level by implementing:
 ## Run
 
 ```bash
-go run cmd/server/main.go
+go run ./cmd/server/main.go 9090
 ```
 
 Test with:
